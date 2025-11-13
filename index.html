@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Chat</title>
+    <style>
+        body {
+            font-family: 'Mountains of Christmas', cursive;
+            background-color: #f0f8ff;
+            background-image: url('https://www.transparenttextures.com/patterns/snow.png');
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .chat-container {
+            width: 400px;
+            height: 600px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 5px solid #c82a2a;
+        }
+
+        .chat-header {
+            background-color: #c82a2a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 5px solid #3d8c40;
+            position: relative;
+        }
+
+        .chat-header::before,
+        .chat-header::after {
+            content: '🎄';
+            font-size: 30px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .chat-header::before {
+            left: 20px;
+        }
+
+        .chat-header::after {
+            right: 20px;
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #fdf5e6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message .author {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .message .text {
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .my-message {
+            align-items: flex-end;
+        }
+
+        .my-message .text {
+            background-color: #3d8c40;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .other-message {
+            align-items: flex-start;
+        }
+
+        .other-message .text {
+            background-color: #e0e0e0;
+            color: #333;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 2px solid #eee;
+            background: #fff;
+        }
+
+        #message-input {
+            flex-grow: 1;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+
+        #message-input:focus {
+            outline: none;
+            border-color: #3d8c40;
+        }
+
+        #send-button {
+            background-color: #c82a2a;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background-color 0.3s;
+        }
+
+        #send-button:hover {
+            background-color: #a02020;
+        }
+
+        /* Snowflakes */
+        .snowflake {
+            color: #fff;
+            font-size: 1em;
+            font-family: Arial;
+            text-shadow: 0 0 1px #000;
+            position: absolute;
+            top: -10%;
+            z-index: 9999;
+            user-select: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {transform: translateY(0px);}
+            100% {transform: translateY(105vh);}
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            Christmas Chat
+        </div>
+        <div class="chat-box" id="chat-box">
+            <div class="message other-message">
+                <div class="author">Santa Claus</div>
+                <div class="text">Ho ho ho! Merry Christmas! What would you like for Christmas?</div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="message-input" placeholder="Type your wish...">
+            <button id="send-button">🎅</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatBox = document.getElementById('chat-box');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+
+            // Create falling snowflakes
+            function createSnowflakes() {
+                const snowflakeCount = 50;
+                for (let i = 0; i < snowflakeCount; i++) {
+                    const snowflake = document.createElement('div');
+                    snowflake.className = 'snowflake';
+                    snowflake.innerHTML = '❅';
+                    snowflake.style.left = Math.random() * 100 + 'vw';
+                    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+                    snowflake.style.animationDelay = Math.random() * 5 + 's';
+                    snowflake.style.opacity = Math.random();
+                    snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+                    document.body.appendChild(snowflake);
+                }
+            }
+
+            function addMessage(author, text, isMe) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.classList.add(isMe ? 'my-message' : 'other-message');
+
+                const authorElement = document.createElement('div');
+                authorElement.classList.add('author');
+                authorElement.textContent = author;
+
+                const textElement = document.createElement('div');
+                textElement.classList.add('text');
+                textElement.textContent = text;
+
+                messageElement.appendChild(authorElement);
+                messageElement.appendChild(textElement);
+                chatBox.appendChild(messageElement);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            function sendMessage() {
+                const messageText = messageInput.value.trim();
+                if (messageText !== '') {
+                    addMessage('Me', messageText, true);
+                    messageInput.value = '';
+
+                    // Simulate a reply from Santa
+                    setTimeout(() => {
+                        addMessage('Santa Claus', 'That sounds wonderful! I will see what I can do. Merry Christmas! 🎁');
+                    }, 1500);
+                }
+            }
+
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            createSnowflakes();
+        });
+    </script>
+
+</body>
+</html>
