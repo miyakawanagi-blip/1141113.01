@@ -1,249 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christmas Chat</title>
-    <style>
-        body {
-            font-family: 'Mountains of Christmas', cursive;
-            background-color: #f0f8ff;
-            background-image: url('https://www.transparenttextures.com/patterns/snow.png');
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christmas Slot Machine 🎄</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas&display=swap');
 
-        .chat-container {
-            width: 400px;
-            height: 600px;
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border: 5px solid #c82a2a;
-        }
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(to bottom, #e0f7fa, #80deea);
+      background-image: url('https://www.transparenttextures.com/patterns/snow.png');
+      font-family: 'Mountains of Christmas', cursive;
+      overflow: hidden;
+    }
 
-        .chat-header {
-            background-color: #c82a2a;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            border-bottom: 5px solid #3d8c40;
-            position: relative;
-        }
+    .slot-container {
+      background: white;
+      border: 5px solid #c62828;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      width: 420px;
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
 
-        .chat-header::before,
-        .chat-header::after {
-            content: '🎄';
-            font-size: 30px;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+    .slot-header {
+      background: #c62828;
+      color: white;
+      width: 100%;
+      text-align: center;
+      font-size: 32px;
+      padding: 20px 0;
+      border-bottom: 4px solid #ef5350;
+    }
 
-        .chat-header::before {
-            left: 20px;
-        }
+    .reels {
+      display: flex;
+      justify-content: space-around;
+      margin: 40px 0;
+      width: 100%;
+      height: 220px;
+    }
 
-        .chat-header::after {
-            right: 20px;
-        }
+    .reel {
+      background: #fefefe;
+      border: 3px solid #ef5350;
+      border-radius: 15px;
+      width: 100px;
+      height: 220px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 60px;
+      color: #c62828;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        .chat-box {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background-color: #fdf5e6;
-            display: flex;
-            flex-direction: column;
-        }
+    .spin-button {
+      background: linear-gradient(to bottom, #43a047, #2e7d32);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 15px 50px;
+      font-size: 24px;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #1b5e20;
+      transition: all 0.2s ease;
+    }
 
-        .message {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-        }
+    .spin-button:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #1b5e20;
+    }
 
-        .message .author {
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
+    .result {
+      font-size: 26px;
+      color: #c62828;
+      margin-top: 30px;
+      font-weight: bold;
+    }
 
-        .message .text {
-            padding: 10px 15px;
-            border-radius: 20px;
-            max-width: 80%;
-            word-wrap: break-word;
-        }
-
-        .my-message {
-            align-items: flex-end;
-        }
-
-        .my-message .text {
-            background-color: #3d8c40;
-            color: white;
-            border-bottom-right-radius: 5px;
-        }
-
-        .other-message {
-            align-items: flex-start;
-        }
-
-        .other-message .text {
-            background-color: #e0e0e0;
-            color: #333;
-            border-bottom-left-radius: 5px;
-        }
-
-        .chat-input {
-            display: flex;
-            padding: 15px;
-            border-top: 2px solid #eee;
-            background: #fff;
-        }
-
-        #message-input {
-            flex-grow: 1;
-            border: 2px solid #ddd;
-            border-radius: 20px;
-            padding: 10px 15px;
-            font-size: 16px;
-        }
-
-        #message-input:focus {
-            outline: none;
-            border-color: #3d8c40;
-        }
-
-        #send-button {
-            background-color: #c82a2a;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            margin-left: 10px;
-            cursor: pointer;
-            font-size: 20px;
-            transition: background-color 0.3s;
-        }
-
-        #send-button:hover {
-            background-color: #a02020;
-        }
-
-        /* Snowflakes */
-        .snowflake {
-            color: #fff;
-            font-size: 1em;
-            font-family: Arial;
-            text-shadow: 0 0 1px #000;
-            position: absolute;
-            top: -10%;
-            z-index: 9999;
-            user-select: none;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% {transform: translateY(0px);}
-            100% {transform: translateY(105vh);}
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&display=swap" rel="stylesheet">
+    .score {
+      position: absolute;
+      bottom: 20px;
+      font-size: 22px;
+      color: #388e3c;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-
-    <div class="chat-container">
-        <div class="chat-header">
-            Christmas Chat
-        </div>
-        <div class="chat-box" id="chat-box">
-            <div class="message other-message">
-                <div class="author">Santa Claus</div>
-                <div class="text">Ho ho ho! Merry Christmas! What would you like for Christmas?</div>
-            </div>
-        </div>
-        <div class="chat-input">
-            <input type="text" id="message-input" placeholder="Type your wish...">
-            <button id="send-button">🎅</button>
-        </div>
+  <div class="slot-container">
+    <div class="slot-header">🎄 Christmas Slot 🎅</div>
+    <div class="reels">
+      <div class="reel" id="reel1">🎁</div>
+      <div class="reel" id="reel2">⭐</div>
+      <div class="reel" id="reel3">🎄</div>
     </div>
+    <button class="spin-button" id="spinButton">SPIN</button>
+    <div class="result" id="resultText">Try your luck!</div>
+    <div class="score" id="scoreBoard">Score: 0</div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const chatBox = document.getElementById('chat-box');
-            const messageInput = document.getElementById('message-input');
-            const sendButton = document.getElementById('send-button');
+  <script>
+    const icons = ["🎁", "🎄", "⭐", "❄️", "🍬", "🔔"];
+    const spinButton = document.getElementById('spinButton');
+    const resultText = document.getElementById('resultText');
+    const scoreBoard = document.getElementById('scoreBoard');
+    let score = 0;
 
-            // Create falling snowflakes
-            function createSnowflakes() {
-                const snowflakeCount = 50;
-                for (let i = 0; i < snowflakeCount; i++) {
-                    const snowflake = document.createElement('div');
-                    snowflake.className = 'snowflake';
-                    snowflake.innerHTML = '❅';
-                    snowflake.style.left = Math.random() * 100 + 'vw';
-                    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
-                    snowflake.style.animationDelay = Math.random() * 5 + 's';
-                    snowflake.style.opacity = Math.random();
-                    snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
-                    document.body.appendChild(snowflake);
-                }
+    const spinSound = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_1d3959e41e.mp3?filename=slot-machine-spin-113349.mp3");
+    const winSound = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_d119312f49.mp3?filename=win-sound-2015.mp3");
+
+    spinButton.addEventListener('click', () => {
+      resultText.textContent = "Spinning...";
+      spinSound.play();
+      spinButton.disabled = true;
+
+      const reels = [document.getElementById('reel1'), document.getElementById('reel2'), document.getElementById('reel3')];
+
+      let results = [];
+
+      reels.forEach((reel, index) => {
+        let count = 0;
+        const spin = setInterval(() => {
+          reel.textContent = icons[Math.floor(Math.random() * icons.length)];
+          count++;
+          if (count > 15 + index * 5) {
+            clearInterval(spin);
+            const final = icons[Math.floor(Math.random() * icons.length)];
+            reel.textContent = final;
+            results[index] = final;
+
+            // 當三個轉軸都停止時
+            if (results.filter(Boolean).length === 3) {
+              spinButton.disabled = false;
+              if (results[0] === results[1] && results[1] === results[2]) {
+                resultText.textContent = `🎉 JACKPOT! You got ${results[0]} x3!`;
+                winSound.play();
+                score += 10;
+              } else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
+                resultText.textContent = `✨ Two of a kind! +5 points!`;
+                score += 5;
+              } else {
+                resultText.textContent = `❄️ Try again!`;
+              }
+              scoreBoard.textContent = `Score: ${score}`;
             }
-
-            function addMessage(author, text, isMe) {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
-                messageElement.classList.add(isMe ? 'my-message' : 'other-message');
-
-                const authorElement = document.createElement('div');
-                authorElement.classList.add('author');
-                authorElement.textContent = author;
-
-                const textElement = document.createElement('div');
-                textElement.classList.add('text');
-                textElement.textContent = text;
-
-                messageElement.appendChild(authorElement);
-                messageElement.appendChild(textElement);
-                chatBox.appendChild(messageElement);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-
-            function sendMessage() {
-                const messageText = messageInput.value.trim();
-                if (messageText !== '') {
-                    addMessage('Me', messageText, true);
-                    messageInput.value = '';
-
-                    // Simulate a reply from Santa
-                    setTimeout(() => {
-                        addMessage('Santa Claus', 'That sounds wonderful! I will see what I can do. Merry Christmas! 🎁');
-                    }, 1500);
-                }
-            }
-
-            sendButton.addEventListener('click', sendMessage);
-            messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-
-            createSnowflakes();
-        });
-    </script>
-
+          }
+        }, 100);
+      });
+    });
+  </script>
 </body>
 </html>
